@@ -396,54 +396,24 @@ export class AdminGuideService {
     },
   ]
 
-  /**
-   * 获取所有引导步骤
-   * @returns 引导步骤数组
-   */
   getGuideSteps(): GuideStep[] {
     return this.guideSteps
   }
 
-  /**
-   * 根据分类获取引导步骤
-   * @param category 步骤分类
-   * @returns 符合分类的引导步骤数组
-   */
   getStepsByCategory(category: string): GuideStep[] {
-    if (!category) {
-      console.warn("getStepsByCategory: category参数不能为空")
-      return []
-    }
     return this.guideSteps.filter((step) => step.category === category)
   }
 
-  /**
-   * 获取快捷问题列表
-   * @returns 快捷问题数组
-   */
   getQuickQuestions(): QuickQuestion[] {
     return this.quickQuestions
   }
 
-  /**
-   * 获取知识库内容
-   * @returns 知识库项目数组
-   */
   getKnowledgeBase(): KnowledgeItem[] {
     return this.knowledgeBase
   }
 
-  /**
-   * 搜索知识库内容
-   * @param query 搜索关键词
-   * @returns 匹配的知识库项目数组
-   */
   searchKnowledge(query: string): KnowledgeItem[] {
-    if (!query || query.trim().length === 0) {
-      return this.knowledgeBase
-    }
-    
-    const lowercaseQuery = query.toLowerCase().trim()
+    const lowercaseQuery = query.toLowerCase()
     return this.knowledgeBase.filter(
       (item) =>
         item.title.toLowerCase().includes(lowercaseQuery) ||
@@ -452,24 +422,9 @@ export class AdminGuideService {
     )
   }
 
-  /**
-   * 处理用户问题并生成智能回复
-   * @param question 用户提出的问题
-   * @returns Promise包装的聊天消息
-   */
   async processUserQuestion(question: string): Promise<ChatMessage> {
-    if (!question || question.trim().length === 0) {
-      return {
-        id: `msg-${Date.now()}`,
-        content: "请输入您想要了解的问题。",
-        isUser: false,
-        timestamp: new Date(),
-        relatedGuides: ["system-overview"],
-      }
-    }
-
     // 简单的关键词匹配逻辑
-    const keywords = question.toLowerCase().trim()
+    const keywords = question.toLowerCase()
     let response = ""
     let relatedGuides: string[] = []
 
@@ -496,18 +451,18 @@ export class AdminGuideService {
     }
 
     return {
-      id: `msg-${Date.now()}`,
+      id: Date.now().toString(),
+      role: "assistant",
       content: response,
-      isUser: false,
       timestamp: new Date(),
-      relatedGuides,
+      type: "text",
+      metadata: {
+        confidence: 0.8,
+        category: "general",
+      },
     }
   }
 
-  /**
-   * 标记步骤为已完成
-   * @param stepId 步骤ID
-   */
   markStepCompleted(stepId: string): void {
     const step = this.guideSteps.find((s) => s.id === stepId)
     if (step) {
@@ -515,14 +470,10 @@ export class AdminGuideService {
     }
   }
 
-  /**
-   * 获取完成进度统计
-   * @returns 包含已完成数量、总数和百分比的对象
-   */
   getProgress(): { completed: number; total: number; percentage: number } {
     const completed = this.guideSteps.filter((step) => step.completed).length
     const total = this.guideSteps.length
-    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0
+    const percentage = Math.round((completed / total) * 100)
     return { completed, total, percentage }
   }
 }

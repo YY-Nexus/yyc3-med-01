@@ -1,72 +1,84 @@
 import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import type { Metadata, Viewport } from "next"
+import { Inter, Noto_Sans_SC } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { LanguageProvider } from "@/contexts/language-context"
-import { LoadingProvider } from "@/contexts/loading-context"
-import { UserAvatarProvider } from "@/contexts/user-avatar-context"
-import { AutoTranslationProvider } from "@/contexts/auto-translation-context"
 import { Toaster } from "@/components/ui/toaster"
-import { jsonLd } from "@/lib/seo-config"
+import { LanguageProvider } from "@/contexts/language-context"
+import { OfflineNotification } from "@/components/offline-notification"
+import { Logo } from "@/components/brand/logo"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+})
+
+const notoSansSC = Noto_Sans_SC({
+  subsets: ["latin"],
+  variable: "--font-noto-sans-sc",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
   title: {
-    default: "YYC³-Med | AI-Powered Intelligent Medical System",
-    template: "%s | YYC³-Med",
+    default: "言语云³医疗AI系统 - 智能医疗诊断平台",
+    template: "%s | 言语云³医疗AI系统",
   },
   description:
-    "AI-powered intelligent medical system providing diagnostic assistance, case analysis, and knowledge graph capabilities",
+    "言语云³是领先的医疗AI智能诊断平台，提供AI辅助诊断、患者管理、临床决策支持、远程医疗等全方位医疗信息化解决方案。",
   keywords: [
-    "Medical AI",
-    "Smart Diagnosis",
-    "Case Analysis",
-    "Knowledge Graph",
-    "Medical System",
-    "Artificial Intelligence",
+    "医疗AI",
+    "智能诊断",
+    "医疗信息化",
+    "临床决策支持",
+    "远程医疗",
+    "患者管理",
+    "医学影像AI",
+    "电子病历",
+    "医疗大数据",
+    "言语云",
   ],
-  authors: [{ name: "YYC³-Med" }],
-  creator: "YYC³-Med",
-  publisher: "YYC³-Med",
+  authors: [{ name: "言语云³团队" }],
+  creator: "言语云³",
+  publisher: "言语云³医疗科技",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://yyc-med.vercel.app"),
+  metadataBase: new URL("https://yanyu-cloud.com"),
   alternates: {
     canonical: "/",
     languages: {
-      "zh-CN": "/zh",
-      "en-US": "/en",
+      "zh-CN": "/zh-CN",
+      "en-US": "/en-US",
+      "ja-JP": "/ja-JP",
+      "ko-KR": "/ko-KR",
     },
   },
   openGraph: {
     type: "website",
     locale: "zh_CN",
-    url: "https://yyc-med.vercel.app",
-    title: "YYC³-Med | AI-Powered Intelligent Medical System",
-    description:
-      "AI-powered intelligent medical system providing diagnostic assistance, case analysis, and knowledge graph capabilities",
-    siteName: "YYC³-Med",
+    url: "https://yanyu-cloud.com",
+    title: "言语云³医疗AI系统 - 智能医疗诊断平台",
+    description: "领先的医疗AI智能诊断平台，提供全方位医疗信息化解决方案",
+    siteName: "言语云³医疗AI系统",
     images: [
       {
-        url: "/logo-512.png",
-        width: 512,
-        height: 512,
-        alt: "YYC³-Med Logo",
+        url: "/images/yanyu-cloud-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "言语云³医疗AI系统",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "YYC³-Med | AI-Powered Intelligent Medical System",
-    description:
-      "AI-powered intelligent medical system providing diagnostic assistance, case analysis, and knowledge graph capabilities",
-    images: ["/logo-512.png"],
-    creator: "@yyc_med",
+    title: "言语云³医疗AI系统",
+    description: "领先的医疗AI智能诊断平台",
+    images: ["/images/yanyu-cloud-logo.png"],
+    creator: "@yanyucloud",
   },
   robots: {
     index: true,
@@ -79,17 +91,27 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/logo-192.png",
-    other: {
-      rel: "apple-touch-icon-precomposed",
-      url: "/logo-192.png",
-    },
+  verification: {
+    google: "your-google-verification-code",
+    yandex: "your-yandex-verification-code",
+    yahoo: "your-yahoo-verification-code",
   },
-  manifest: "/manifest.json",
+  category: "healthcare",
+  classification: "Medical AI Platform",
+  referrer: "origin-when-cross-origin",
     generator: 'v0.app'
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#2563eb" },
+    { media: "(prefers-color-scheme: dark)", color: "#1d4ed8" },
+  ],
+  colorScheme: "light dark",
 }
 
 export default function RootLayout({
@@ -98,21 +120,70 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="zh-CN" suppressHydrationWarning>
+    <html lang="zh-CN" className={`${inter.variable} ${notoSansSC.variable}`}>
       <head>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <link rel="icon" href="/images/yanyu-cloud-logo.png" />
+        <link rel="apple-touch-icon" href="/images/yanyu-cloud-logo.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="application-name" content="言语云³医疗AI系统" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="言语云³" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name="msapplication-TileColor" content="#2563eb" />
+        <meta name="theme-color" content="#2563eb" />
+
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              name: "言语云³医疗AI系统",
+              description: "领先的医疗AI智能诊断平台，提供全方位医疗信息化解决方案",
+              url: "https://yanyu-cloud.com",
+              logo: "https://yanyu-cloud.com/images/yanyu-cloud-logo.png",
+              applicationCategory: "HealthApplication",
+              operatingSystem: "Web",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "CNY",
+              },
+              provider: {
+                "@type": "Organization",
+                name: "言语云³医疗科技",
+                url: "https://yanyu-cloud.com",
+              },
+            }),
+          }}
+        />
       </head>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <body className="min-h-screen bg-background font-sans antialiased">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <LanguageProvider>
-            <LoadingProvider>
-              <UserAvatarProvider>
-                <AutoTranslationProvider>
-                  {children}
-                  <Toaster />
-                </AutoTranslationProvider>
-              </UserAvatarProvider>
-            </LoadingProvider>
+            <div className="relative flex min-h-screen flex-col">
+              <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <div className="container flex h-14 items-center">
+                  <Logo size="sm" />
+                </div>
+              </header>
+              <main className="flex-1">{children}</main>
+              <footer className="border-t py-6 md:py-0">
+                <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+                  <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+                    <Logo size="sm" showText={false} />
+                    <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+                      © 2024 言语云³医疗科技. 保留所有权利.
+                    </p>
+                  </div>
+                </div>
+              </footer>
+            </div>
+            <OfflineNotification />
+            <Toaster />
           </LanguageProvider>
         </ThemeProvider>
       </body>

@@ -430,10 +430,7 @@ export function markUserInteraction(name: string) {
 }
 
 // 用于测量组件渲染时间的HOC
-export function withPerformanceTracking<P extends object>(
-  Component: React.ComponentType<P>, 
-  componentName: string
-): React.ComponentType<P> {
+export function withPerformanceTracking<P extends object>(Component: React.ComponentType<P>, componentName: string) {
   return function PerformanceTrackedComponent(props: P) {
     useEffect(() => {
       const endMark = markUserInteraction(`${componentName}渲染`)
@@ -442,6 +439,6 @@ export function withPerformanceTracking<P extends object>(
       }
     }, [])
 
-    return React.createElement(Component, props)
+    return <Component {...props} />
   }
 }

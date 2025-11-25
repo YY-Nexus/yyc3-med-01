@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -9,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Eye, EyeOff, Lock, Mail, AlertCircle, Shield, CheckCircle } from "lucide-react"
+import { Eye, EyeOff, Lock, Mail, AlertCircle, Shield, CheckCircle, Info } from "lucide-react"
 import Link from "next/link"
 
 interface LoginFormProps {
@@ -27,8 +26,8 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   const [success, setSuccess] = useState("")
   const router = useRouter()
 
-  // 模拟用户数据库（实际应用中应该在后端）
-  const validUsers = [
+  // 预设的测试账户
+  const testAccounts = [
     { email: "admin@yanyucloud.com", password: "admin123", name: "系统管理员", role: "admin" },
     { email: "doctor@yanyucloud.com", password: "doctor123", name: "张医生", role: "doctor" },
     { email: "nurse@yanyucloud.com", password: "nurse123", name: "李护士", role: "nurse" },
@@ -41,63 +40,72 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     setSuccess("")
 
     // 基本验证
-    if (!formData.email || !formData.password) {
-      setError("请填写完整的邮箱和密码")
+    if (!formData.email.trim()) {
+      setError("请输入邮箱地址")
       setIsLoading(false)
       return
     }
 
-    if (!formData.email.includes("@")) {
-      setError("请输入有效的邮箱地址")
+    if (!formData.password.trim()) {
+      setError("请输入密码")
       setIsLoading(false)
       return
     }
 
-    // 模拟网络延迟
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    if (!formData.email.includes("@") || !formData.email.includes(".")) {
+      setError("请输入有效的邮箱地址格式")
+      setIsLoading(false)
+      return
+    }
 
     try {
-      // 查找用户
-      const user = validUsers.find((u) => u.email === formData.email)
+      // 模拟网络延迟
+      await new Promise((resolve) => setTimeout(resolve, 800))
 
-      if (!user) {
-        setError("邮箱地址不存在，请检查邮箱是否正确或先注册账户")
+      // 查找匹配的测试账户
+      const matchedAccount = testAccounts.find(
+        (account) => account.email.toLowerCase() === formData.email.toLowerCase(),
+      )
+
+      if (!matchedAccount) {
+        setError("该邮箱地址未注册，请检查邮箱是否正确或先注册账户")
         setIsLoading(false)
         return
       }
 
-      // 验证密码
-      if (user.password !== formData.password) {
+      if (matchedAccount.password !== formData.password) {
         setError("密码错误，请检查密码是否正确")
         setIsLoading(false)
         return
       }
 
       // 登录成功
-      setSuccess("登录成功！正在跳转...")
+      setSuccess("登录验证成功！正在进入系统...")
 
-      // 存储用户信息
+      // 存储用户信息到本地存储
       const userData = {
         id: Date.now(),
-        email: user.email,
-        name: user.name,
-        role: user.role,
+        email: matchedAccount.email,
+        name: matchedAccount.name,
+        role: matchedAccount.role,
         loginTime: new Date().toISOString(),
+        token: `token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       }
 
       localStorage.setItem("user", JSON.stringify(userData))
+      localStorage.setItem("token", userData.token)
       localStorage.setItem("isLoggedIn", "true")
 
       // 触发成功回调
       onSuccess?.()
 
-      // 延迟跳转以显示成功消息
+      // 立即跳转，不等待
       setTimeout(() => {
-        router.push("/dashboard")
-      }, 1500)
+        window.location.href = "/dashboard"
+      }, 1000)
     } catch (err) {
-      setError("系统错误，请稍后重试")
-    } finally {
+      console.error("Login error:", err)
+      setError("系统内部错误，请稍后重试或联系技术支持")
       setIsLoading(false)
     }
   }
@@ -113,6 +121,15 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     if (success) setSuccess("")
   }
 
+  const handleQuickLogin = (account: (typeof testAccounts)[0]) => {
+    setFormData({
+      email: account.email,
+      password: account.password,
+    })
+    setError("")
+    setSuccess("")
+  }
+
   return (
     <Card className="w-full max-w-md mx-auto border-blue-200 shadow-xl bg-white/95 backdrop-blur-sm">
       <CardHeader className="space-y-1 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-t-lg border-b border-blue-100">
@@ -124,6 +141,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           输入您的邮箱和密码来访问您的医疗管理账户
         </CardDescription>
       </CardHeader>
+
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4 p-6">
           {error && (
@@ -199,13 +217,27 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             </Link>
           </div>
 
-          {/* 测试账户提示 */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-            <p className="text-xs text-blue-700 font-medium mb-1">测试账户：</p>
-            <div className="text-xs text-blue-600 space-y-1">
-              <div>管理员: admin@yanyucloud.com / admin123</div>
-              <div>医生: doctor@yanyucloud.com / doctor123</div>
-              <div>护士: nurse@yanyucloud.com / nurse123</div>
+          {/* 测试账户快速登录 */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-center mb-2">
+              <Info className="h-4 w-4 text-blue-600 mr-2" />
+              <p className="text-sm text-blue-700 font-medium">测试账户快速登录：</p>
+            </div>
+            <div className="space-y-2">
+              {testAccounts.map((account, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => handleQuickLogin(account)}
+                  className="w-full text-left text-xs bg-white border border-blue-200 rounded px-3 py-2 hover:bg-blue-50 transition-colors"
+                  disabled={isLoading}
+                >
+                  <div className="font-medium text-blue-800">{account.name}</div>
+                  <div className="text-blue-600">
+                    {account.email} / {account.password}
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
         </CardContent>
@@ -219,7 +251,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             {isLoading ? (
               <div className="flex items-center">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                验证中...
+                验证登录中...
               </div>
             ) : (
               "安全登录"

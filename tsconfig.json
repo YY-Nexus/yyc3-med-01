@@ -19,21 +19,11 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@/components/*": ["./components/*"],
-      "@/lib/*": ["./lib/*"],
-      "@/hooks/*": ["./hooks/*"],
-      "@/types/*": ["./types/*"],
-      "@/services/*": ["./services/*"],
-      "@/utils/*": ["./utils/*"],
-      "@/contexts/*": ["./contexts/*"],
-      "@/store/*": ["./store/*"],
-      "@/config/*": ["./config/*"],
-      "@/i18n/*": ["./i18n/*"]
+      "@/*": ["./*"]
     },
-    "target": "es5",
+    "target": "es2017",
     "forceConsistentCasingInFileNames": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", ".next", "dist", "build"]
+  "exclude": ["node_modules", ".next", "out"]
 }

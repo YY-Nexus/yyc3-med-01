@@ -22,24 +22,24 @@ function LoginSkeleton() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center p-4">
       {/* 背景动画折射线 */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-0 w-1 h-32 bg-gradient-to-b from-transparent via-blue-400/30 to-transparent animate-pulse" />
+        <div className="absolute top-1/4 left-0 w-1 h-32 bg-gradient-to-b from-transparent via-blue-400/30 to-transparent refraction-line" />
         <div
-          className="absolute top-1/2 left-1/4 w-0.5 h-24 bg-gradient-to-b from-transparent via-cyan-400/40 to-transparent animate-pulse"
+          className="absolute top-1/2 left-1/4 w-0.5 h-24 bg-gradient-to-b from-transparent via-cyan-400/40 to-transparent refraction-line"
           style={{ animationDelay: "1s" }}
         />
         <div
-          className="absolute top-3/4 left-1/2 w-1 h-28 bg-gradient-to-b from-transparent via-blue-500/35 to-transparent animate-pulse"
+          className="absolute top-3/4 left-1/2 w-1 h-28 bg-gradient-to-b from-transparent via-blue-500/35 to-transparent refraction-line"
           style={{ animationDelay: "2s" }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-0.5 h-20 bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent animate-pulse"
+          className="absolute top-1/3 right-1/4 w-0.5 h-20 bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent refraction-line"
           style={{ animationDelay: "0.5s" }}
         />
         <div
-          className="absolute top-2/3 right-0 w-1 h-36 bg-gradient-to-b from-transparent via-blue-600/25 to-transparent animate-pulse"
+          className="absolute top-2/3 right-0 w-1 h-36 bg-gradient-to-b from-transparent via-blue-600/25 to-transparent refraction-line"
           style={{ animationDelay: "1.5s" }}
         />
       </div>

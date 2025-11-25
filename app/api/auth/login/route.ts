@@ -105,10 +105,10 @@ export async function POST(request: NextRequest) {
     console.error("Login error:", error)
     return NextResponse.json(
       {
-        message: "API endpoint not implemented in demo version",
+        message: "服务器内部错误，请稍后重试",
         code: "INTERNAL_ERROR",
       },
-      { status: 501 },
+      { status: 500 },
     )
   }
 }
