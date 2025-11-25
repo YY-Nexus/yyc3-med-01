@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    /* 医疗蓝色主题 */
+    --primary: 217 91% 60%; /* 医疗蓝 */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 217 91% 60%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 217 13% 45%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 217 91% 60%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 217 32% 89%;
+    --input: 217 32% 89%;
+    --ring: 217 91% 60%;
+
+    /* 医疗图表色彩 */
+    --chart-1: 217 91% 60%; /* 主蓝色 */
+    --chart-2: 195 100% 50%; /* 青色 */
+    --chart-3: 204 94% 94%; /* 浅蓝 */
+    --chart-4: 217 71% 53%; /* 深蓝 */
+    --chart-5: 188 94% 68%; /* 天蓝 */
+
+    --radius: 0.5rem;
+    --sidebar-background: 217 32% 98%;
+    --sidebar-foreground: 217 13% 26%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 217 32% 95%;
+    --sidebar-accent-foreground: 217 91% 60%;
+    --sidebar-border: 217 32% 91%;
+    --sidebar-ring: 217 91% 60%;
+  }
+
+  .dark {
+    --background: 217 32% 4%;
+    --foreground: 0 0% 98%;
+    --card: 217 32% 4%;
+    --card-foreground: 0 0% 98%;
+    --popover: 217 32% 4%;
+    --popover-foreground: 0 0% 98%;
+
+    /* 暗色医疗蓝色主题 */
+    --primary: 217 91% 60%;
+    --primary-foreground: 217 32% 4%;
+    --secondary: 217 32% 15%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 217 32% 15%;
+    --muted-foreground: 217 13% 64%;
+    --accent: 217 32% 15%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 217 32% 15%;
+    --input: 217 32% 15%;
+    --ring: 217 91% 60%;
+
+    /* 暗色医疗图表色彩 */
+    --chart-1: 217 91% 60%;
+    --chart-2: 195 100% 50%;
+    --chart-3: 217 32% 25%;
+    --chart-4: 217 71% 53%;
+    --chart-5: 188 94% 68%;
+
+    --sidebar-background: 217 32% 10%;
+    --sidebar-foreground: 217 32% 95%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 32% 15%;
+    --sidebar-accent-foreground: 217 32% 95%;
+    --sidebar-border: 217 32% 15%;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* 医疗蓝色动画效果 */
+@keyframes medical-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+}
+
+@keyframes refraction-line {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(200%) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+.medical-pulse {
+  animation: medical-pulse 2s infinite;
+}
+
+.refraction-line {
+  animation: refraction-line 3s ease-in-out infinite;
+}
+
+/* 医疗蓝色渐变背景 */
+.medical-gradient {
+  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+}
+
+.medical-gradient-light {
+  background: linear-gradient(135deg, #dbeafe 0%, #cffafe 100%);
+}
